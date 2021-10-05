@@ -15,8 +15,11 @@ import {
   EventSettingsModel,
 } from "@syncfusion/ej2-react-schedule";
 
+// Data Manager is required to control remote entry inputs in the calendar
+import { DataManager, WebApiAdaptor } from "@syncfusion/ej2-data";
+
 class App extends React.Component {
-  // Bind local JSON data
+  // Local JSON data example
   private localData: EventSettingsModel = {
     dataSource: [
       {
@@ -26,12 +29,19 @@ class App extends React.Component {
     ],
   };
 
+  // Remote data controller
+  private remoteData = new DataManager({
+    url: "https://js.syncfusion.com/demos/ejservices/api/Schedule/LoadData",
+    adaptor: new WebApiAdaptor(),
+    crossDomain: true,
+  });
+
   public render() {
     return (
       // This is the main component of the Syncfusion React Schedule library.
       // The previously imported services are injected so they become activate,
       // rendering them in the main view and turning on their functionalities.
-      <ScheduleComponent eventSettings={this.localData}>
+      <ScheduleComponent eventSettings={{ dataSource: this.remoteData }}>
         <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />
       </ScheduleComponent>
     );
